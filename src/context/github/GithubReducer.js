@@ -12,6 +12,11 @@ const githubReducer = (state, action) => {
       loading: false,
       error: false,
     }
+    case "GET_REPOS": return {
+      ...state,
+      repos: action.payload,
+      loading: false,
+    }
     case "SET_LOADING": return {
       ...state,
       loading: true,
@@ -19,6 +24,7 @@ const githubReducer = (state, action) => {
     case "SET_ERROR": return {
       ...state,
       error: true,
+      loading: false,
     }
     case "REMOVE_ERROR": return {
       ...state,

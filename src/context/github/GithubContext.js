@@ -1,3 +1,4 @@
+import { createStaticHandler } from '@remix-run/router'
 import { createContext, useReducer } from 'react'
 import githubReducer from './GithubReducer'
 
@@ -9,6 +10,7 @@ export const GithubProvider = ({ children }) => {
   const initialState = {
     users: [],
     user: {},
+    repos: [],
     loading: false,
     error: false,
   }
@@ -41,13 +43,11 @@ export const GithubProvider = ({ children }) => {
   }
 
   // Get a single user
-  const getUsers = async login => {
+  const getUser = async login => {
     try {
       setLoading()
 
-      const res = await fetch(`${GITHUB_URL}/users?${login}`)
-      // failure test
-      // const res = await fetch("https://httpstat.us/404")
+      const res = await fetch(`${GITHUB_URL}/users/${login}`)
 
       if (!res.ok) {
         window.location = "/notfound"
@@ -58,6 +58,25 @@ export const GithubProvider = ({ children }) => {
 
       dispatch({
         type: "GET_USER",
+        payload: data,
+      })
+    } catch {
+      dispatch({ type: "SET_ERROR" })
+      setTimeout(() => dispatch({ type: "REMOVE_ERROR" }), 5000)
+    }
+  }
+
+  // Get user repos
+  const getUserRepos = async login => {
+    try {
+      setLoading()
+
+      const res = await fetch(`${GITHUB_URL}/users/${login}/starred`)
+
+      const data = await res.json()
+
+      dispatch({
+        type: "GET_REPOS",
         payload: data,
       })
     } catch {
@@ -76,11 +95,13 @@ export const GithubProvider = ({ children }) => {
     <GithubContext.Provider value={{
       users: state.users,
       user: state.user,
+      repos: state.repos,
       loading: state.loading,
       error: state.error,
       searchUsers,
       clearUsers,
-      getUsers,
+      getUser,
+      getUserRepos,
     }}>
       {children}
     </GithubContext.Provider>
