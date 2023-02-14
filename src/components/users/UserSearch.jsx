@@ -17,12 +17,18 @@ function UserSearch () {
     if (text === "") {
       setAlert("Please enter something", "error")
     } else {
-      dispatch({ type: "SET_LOADING" })
+      try {
+        dispatch({ type: "SET_LOADING" })
 
-      const users = await searchUsers(text)
-      dispatch({ type: "GET_USERS", payload: users })
+        const users = await searchUsers(text)
+        dispatch({ type: "GET_USERS", payload: users })
 
-      setText("")
+        setText("")
+      } catch (err) {
+        setAlert(err, "error")
+
+        dispatch({ type: "REMOVE_LOADING" })
+      }
     }
   }
 

@@ -4,6 +4,8 @@ import alertReducer from "./AlertReducer"
 const AlertContext = createContext()
 
 export const AlertProvider = ({ children }) => {
+  const TIMEOUT_SEC = process.env.REACT_APP_TIMEOUT_SEC
+
   const initialState = null
 
   const [state, dispatch] = useReducer(alertReducer, initialState)
@@ -15,14 +17,14 @@ export const AlertProvider = ({ children }) => {
       payload: { msg, type },
     })
 
-    setTimeout(() => dispatch({ type: "REMOVE_ALERT" }), 3000)
+    setTimeout(() => dispatch({ type: "REMOVE_ALERT" }), TIMEOUT_SEC * 1000)
   }
 
   return (
     <AlertContext.Provider value=
       {{
         alert: state,
-        setAlert,
+        setAlert
       }}>
       {children}
     </AlertContext.Provider>
