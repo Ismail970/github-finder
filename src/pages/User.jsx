@@ -23,7 +23,7 @@ function User () {
         const userData = await getUserAndRepos(params.login)
         dispatch({ type: "GET_USER_AND_REPOS", payload: userData })
       } catch (err) {
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line react-hooks/exhuastive-deps
         setAlert(err, "error")
 
         dispatch({ type: "REMOVE_LOADING" })
