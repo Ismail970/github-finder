@@ -1,1 +1,1 @@
-[Link](https://github-finder-i.netlify.app/)
+## [Demo](https://github-finder-i.netlify.app/)
